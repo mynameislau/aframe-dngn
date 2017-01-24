@@ -1,6 +1,7 @@
-import 'aframe';
+// import 'aframe';
 import 'aframe-animation-component';
-import 'aframe-text-component';
+// import 'aframe-text-component';
+import objModel from 'aframe-extras/src/loaders/object-model';
 import 'babel-polyfill';
 import {Entity, Scene} from 'aframe-react';
 import React from 'react';
@@ -30,6 +31,8 @@ const terrain = createTerrainFromString(terrainStr);
 const store = createStore(combineReducers({
   geo: mainReducer
 }));
+
+// AFRAME.registerComponent('obj-model', objModel);
 
 reduxSystem.register(store);
 reduxComponent.register();

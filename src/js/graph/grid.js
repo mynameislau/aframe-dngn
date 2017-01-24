@@ -1,7 +1,4 @@
-import { Maybe } from 'ramda-fantasy';
 import R from 'ramda';
-const Just = Maybe.Just;
-const Nothing = Maybe.Nothing;
 
 const node = R.curry((grid, y, x) =>
   (grid[y] && grid[y][x] ? grid[y][x] : null)

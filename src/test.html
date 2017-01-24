@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A-Frame React Boilerplate</title>
+    <script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
+  </head>
+
+  <body>
+    <a-scene inspector="url: https://aframe.io/releases/0.4.0/aframe-inspector.min.js">
+      <a-entity camera look-controls wasd-controls></a-entity>
+      <a-sky color="grey"></a-sky>
+      <a-entity scale="0.2 0.2 0.2" position="0 -2 -5" obj-model="obj: url(/data/pillar.obj); mtl: url(/data/pillar.mtl)"></a-entity>
+    </a-scene>
+  </body>
+</html>
