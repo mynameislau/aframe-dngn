@@ -11,4 +11,6 @@ export default () => <Entity
 ></Entity>;
 
 
+
+
 // obj-model="obj: url(/data/pillar.obj); mtl: url(/data/pillar.mtl)"

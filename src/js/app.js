@@ -1,7 +1,7 @@
 // import 'aframe';
 import 'aframe-animation-component';
 // import 'aframe-text-component';
-import objModel from 'aframe-extras/src/loaders/object-model';
+//import objModel from 'aframe-extras/src/loaders/object-model';
 import 'babel-polyfill';
 import {Entity, Scene} from 'aframe-react';
 import React from 'react';
@@ -50,11 +50,14 @@ class VRScene extends React.Component {
     return (
       <Provider store={store}>
         <Scene fog="type: exponential; density: 0.1; color: #011">
-          <Camera>
-            <Entity
-              cursor="maxDistance: 5; fuse: false"
-            >
-            </Entity>
+          <a-assets>
+            <a-asset-item id="pillar-obj" src="/data/pillar.obj"></a-asset-item>
+            <a-asset-item id="pillar-mtl" src="/data/pillar.mtl"></a-asset-item>
+          </a-assets>
+          <Camera position="0 0 -1"
+          geometry="primitive: ring"
+          material="color: red; shader: flat"
+          cursor="maxDistance: 5; fuse: false">
           </Camera>
           <Board />
         </Scene>
