@@ -8,8 +8,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Camera from './components/Camera';
-import Text from './components/Text';
-import Sky from './components/Sky';
 import Cell from './components/cell';
 import terrainStr from '../data/default.dmap';
 
@@ -51,13 +49,12 @@ class VRScene extends React.Component {
       <Provider store={store}>
         <Scene fog="type: exponential; density: 0.1; color: #011">
           <a-assets>
+            <a-asset-item id="pillar2-obj" src="/data/pillar2.obj"></a-asset-item>
             <a-asset-item id="pillar-obj" src="/data/pillar.obj"></a-asset-item>
-            <a-asset-item id="pillar-mtl" src="/data/pillar.mtl"></a-asset-item>
           </a-assets>
           <Camera position="0 0 -1"
           geometry="primitive: ring"
-          material="color: red; shader: flat"
-          cursor="maxDistance: 5; fuse: false">
+          cursor="fuse: false">
           </Camera>
           <Board />
         </Scene>

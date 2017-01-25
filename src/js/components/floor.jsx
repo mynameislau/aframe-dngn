@@ -5,7 +5,6 @@ export default ({ clickHandler }) => <Entity>
   <Entity  geometry="primitive: plane; height: 1; width: 1;"
     material={{
       side: 'single',
-      color: 'grey',
       shader: 'line-dashed',
       tile: '/data/tiles/slime_stone.png'
     }}
