@@ -56,7 +56,7 @@ class VRScene extends React.Component {
           geometry="primitive: ring"
           cursor="fuse: false">
           </Camera>
-          <Board />
+          <Board scale="3 3 3"/>
         </Scene>
       </Provider>
     );

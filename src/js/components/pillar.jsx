@@ -28,7 +28,7 @@ material={{
     side: 'single'
 }}
 obj-model="obj: #pillar2-obj;"
-scale="0.032 0.032 0.032"
+scale="0.03125 0.03125 0.03125"
 position="0 -0.5 -0.0"
 onClick={() => console.dir(event.currentTarget)}
 >
