@@ -7,6 +7,13 @@ import {Entity, Scene} from 'aframe-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+
+const EffectComposerConstructor from 'three-effectcomposer';
+const DotScreenShader from './shaders/dotscreen';
+const RGBShiftShader from './shaders/rgbshift';
+
+const EffectComposer = EffectComposerConstructor(THREE);
+
 import Camera from './components/Camera';
 import Cell from './components/cell';
 import terrainStr from '../data/default.dmap';
