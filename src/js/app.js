@@ -8,9 +8,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 
-const EffectComposerConstructor from 'three-effectcomposer';
-const DotScreenShader from './shaders/dotscreen';
-const RGBShiftShader from './shaders/rgbshift';
+import EffectComposerConstructor from 'three-effectcomposer';
+import 'main-shaders/copy.shader';
+import 'main-shaders/ssao.shader';
 
 const EffectComposer = EffectComposerConstructor(THREE);
 
@@ -47,35 +47,26 @@ var depthMaterial, effectComposer, depthRenderTarget;
 var ssaoPass;
 var group;
 var depthScale = 1.0;
+const postprocessing = { enabled : true, renderMode: 0 };
 
 AFRAME.registerComponent('occlu', {
   init: function () {
-    console.log(this);
-    initPostprocessing(this.object3D, this.camera)
+    initPostprocessing(this.el.object3D, this.el.camera, this.el.renderer)
   },
 
   tick: function () {
-    console.log(this.object3D, this.camera);
-    debugger;
-  //   var timer = performance.now();
-	// 			group.rotation.x = timer * 0.0002;
-	// 			group.rotation.y = timer * 0.0001;
-	// 			if ( postprocessing.enabled ) {
-	// 				// Render depth into depthRenderTarget
-	// 				scene.overrideMaterial = depthMaterial;
-	// 				renderer.render( scene, camera, depthRenderTarget, true );
-	// 				// Render renderPass and SSAO shaderPass
-	// 				scene.overrideMaterial = null;
-	// 				effectComposer.render();
-	// 			} else {
-	// 				renderer.render( scene, camera );
-	// 			}
+			// Render depth into depthRenderTarget
+		this.el.object3D.overrideMaterial = depthMaterial;
+		this.el.renderer.render( this.el.object3D, this.el.camera, depthRenderTarget, true );
+		// Render renderPass and SSAO shaderPass
+		this.el.object3D.overrideMaterial = null;
+		effectComposer.render();
   }
 })
 
-function initPostprocessing(scene, camera) {
+function initPostprocessing(scene, camera, renderer) {
 				// Setup render pass
-				var renderPass = new THREE.RenderPass( scene, camera );
+				var renderPass = new EffectComposer.RenderPass( scene, camera );
 				// Setup depth pass
 				depthMaterial = new THREE.MeshDepthMaterial();
 				depthMaterial.depthPacking = THREE.RGBADepthPacking;
@@ -83,7 +74,7 @@ function initPostprocessing(scene, camera) {
 				var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter };
 				depthRenderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, pars );
 				// Setup SSAO pass
-				ssaoPass = new THREE.ShaderPass( THREE.SSAOShader );
+				ssaoPass = new EffectComposer.ShaderPass( THREE.SSAOShader );
 				ssaoPass.renderToScreen = true;
 				//ssaoPass.uniforms[ "tDiffuse" ].value will be set by ShaderPass
 				ssaoPass.uniforms[ "tDepth" ].value = depthRenderTarget.texture;
@@ -94,7 +85,7 @@ function initPostprocessing(scene, camera) {
 				ssaoPass.uniforms[ 'aoClamp' ].value = 0.3;
 				ssaoPass.uniforms[ 'lumInfluence' ].value = 0.5;
 				// Add pass to effect composer
-				effectComposer = new THREE.EffectComposer( renderer );
+				effectComposer = new EffectComposer( renderer );
 				effectComposer.addPass( renderPass );
 				effectComposer.addPass( ssaoPass );
 }
