@@ -19,6 +19,6 @@ export default ({ clickHandler }) => <Entity>
       }}
       rotation="-90 0 0"
       position="0 -0.5 0"
-      onClick={clickHandler}
+      onClick={clickHandler ? clickHandler : () => {} }
     />
 </Entity>;

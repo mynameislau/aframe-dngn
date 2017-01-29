@@ -1,5 +1,6 @@
 import React from 'react';
 import { Entity } from 'aframe-react';
+import Floor from './floor';
 
 // AFRAME.registerComponent({
 //   update
@@ -21,15 +22,13 @@ AFRAME.registerShader('super-shade', {
 });
 
 
-export default () => <Entity
-material={{
-    shader: 'line-dashed',
-    tile: '/data/pillar2.png',
-    side: 'single'
-}}
-obj-model="obj: #pillar2-obj;"
-scale="0.03125 0.03125 0.03125"
-position="0 -0.5 -0.0"
-onClick={() => console.dir(event.currentTarget)}
->
+export default () =>
+<Entity>
+  <Entity
+    obj-model="obj: #pillar3-obj;"
+    position="0 -0.5 -0.0"
+    onClick={() => console.dir(event.currentTarget)}
+    >
+  </Entity>
+  <Floor />
 </Entity>;

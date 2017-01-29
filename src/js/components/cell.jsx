@@ -2,6 +2,8 @@ import React from 'react';
 import Wall from './wall';
 import Pillar from './pillar';
 import Floor from './floor';
+import Door from './door';
+import Foe from './foe';
 import { Entity } from 'aframe-react';
 import { connect } from 'react-redux';
 
@@ -11,18 +13,22 @@ const getBlock = (terrain) => {
       return Wall;
     case 'P':
       return Pillar;
+    case 'D':
+      return Door;
+    case 'F':
+      return Foe;
     default:
-      return null;
+      return Floor;
   }
 };
 
-export default ({cell, clickHandler}) => {
+export default ({cell, clickHandler, board}) => {
 
   const BlockComponent = getBlock(cell.terrain);
 
   return <Entity
     position={`${cell.x} 0 -${cell.y}`}
   >
-    {BlockComponent ? <BlockComponent /> : <Floor clickHandler={() => clickHandler(cell)} />}
+    {BlockComponent ? <BlockComponent board={board} cell={cell} clickHandler={() => clickHandler(cell)}/> : null}
   </Entity>;
 }

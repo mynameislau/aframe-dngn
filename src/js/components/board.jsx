@@ -7,6 +7,7 @@ import R from 'ramda';
 import { trace } from '../utils/utils';
 
 import Cell from './cell';
+import PlayerCam from './player-cam';
 
 const mapStateToProps = (state) => ({
   playerPos: state.geo.playerPos,
@@ -21,18 +22,17 @@ const mapDispatchToProps = (dispatch) => ({
 
 //bind <Entity position="0 0 1" redux-bind="counter.number: position.z">
 
-const render = ({terrain, playerPos, cellClick}) => <Entity
-position={`${- playerPos.x} 0 ${playerPos.y}`}
-scale="1</Entity> 1 1"
+const render = ({terrain, playerPos, cellClick, scale, position}) => <Entity
+scale={scale} positon={position}
 >
   {R.compose(
-      R.map(cell => <Cell cell={cell} clickHandler={cellClick} key={`${cell.y}x${cell.x}`} />),
+      R.map(cell => <Cell cell={cell} board={terrain} clickHandler={cellClick} key={`${cell.y}x${cell.x}`} />),
       R.unnest
     )(terrain)
   }
-  <Entity light="color: orange; decay: 2; distance: 10; intensity: 1; type: point;" position="8 0 -4">
-    <Entity geometry="primitive: box; width: 0.1; height: 0.1; depth: 0.1;"/>
-  </Entity>
+    {/*<Entity light="color: orange; decay: 2; distance: 10; intensity: 1; type: point;" position="8 0 -4">
+      <Entity geometry="primitive: box; width: 0.1; height: 0.1; depth: 0.1;"/>
+    </Entity>*/}
 </Entity>
 
 export default connect(mapStateToProps, mapDispatchToProps)(render);
