@@ -11,7 +11,7 @@ const Light = vec =>
       <Entity geometry="primitive: box; height: 0.1; width: 0.1; depth: 0.1" />
   </Entity>;
 
-const getLights = ({x, y}, board) => {
+const getLights = ({x, y, light}, board) => {
 
   const getVec = orientation => {
     switch (orientation) {
@@ -36,7 +36,7 @@ const getLights = ({x, y}, board) => {
 
   const setLights = R.compose(
     R.map(adjFloorVec),
-    () => Math.random() > 0.9 ? Just() : Nothing([])
+    () => light ? Just() : Nothing([])
   );
   const toReturn = setLights().getOrElse([]);
 

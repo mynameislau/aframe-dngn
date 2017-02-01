@@ -18,6 +18,28 @@ const getPlayerPos = R.compose(
   R.unnest
 )
 
+const hasNeighbourWithLight = (cell, terrain) =>
+  R.compose(
+    R.filter(neigh => neigh.terrain === 'B' && neigh.light),
+    () => neighbours(cell.x, cell.y, terrain)
+  );
+
+const isWall = cell => cell.terrain === 'B';
+
+const updateTwoDimensional = (x, y, val) => R.adjust(R.update(x, val), y);
+
+const trace = val => {
+  console.log(val);
+  return val;
+}
+
+const setLights = R.compose(
+  R.reduce((terrainAcc, cell) => updateTwoDimensional(x, y, R.assoc('light', hasNeighbourWithLight(cell, terrainAc)))),
+  trace,
+  R.filter(isWall),
+  R.unnest
+);
+
 export default (prevState, action) => {
   prevState = prevState || initialState;
   switch (action.type) {
@@ -34,9 +56,13 @@ export default (prevState, action) => {
 
     case CREATE_TERRAIN:
       const newState = R.compose(
+        state => R.assoc('terrain', setLights(state.terrain))(state),
         R.assoc('playerPos', getPlayerPos(action.payload)),
         R.assoc('terrain', action.payload)
       )(prevState);
+
+      console.log(setLights(newState.terrain));
+      debugger;
 
       return newState;
 
