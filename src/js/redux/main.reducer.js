@@ -5,7 +5,7 @@ import {
   CREATE_TERRAIN
 } from './main.actions';
 import R from 'ramda';
-import { orientation, neighbour } from '../graph/grid';
+import { orientation, neighbour, neighbours } from '../graph/grid';
 
 const initialState = {
   terrain: null,
@@ -20,25 +20,28 @@ const getPlayerPos = R.compose(
 
 const hasNeighbourWithLight = (cell, terrain) =>
   R.compose(
-    R.filter(neigh => neigh.terrain === 'B' && neigh.light),
+    R.length,
+    R.filter(neigh => neigh && neigh.light),
     () => neighbours(cell.x, cell.y, terrain)
-  );
+  )();
 
 const isWall = cell => cell.terrain === 'B';
 
-const updateTwoDimensional = (x, y, val) => R.adjust(R.update(x, val), y);
+const updateTwoDimensional = ([x, y], val) => R.adjust(R.update(x, val), y);
 
 const trace = val => {
   console.log(val);
   return val;
 }
 
-const setLights = R.compose(
-  R.reduce((terrainAcc, cell) => updateTwoDimensional(x, y, R.assoc('light', hasNeighbourWithLight(cell, terrainAc)))),
-  trace,
+const setLights = terrain => R.compose(
+  R.reduce(
+    (terrainAcc, cell) =>
+      updateTwoDimensional([cell.x, cell.y], R.assoc('light', !hasNeighbourWithLight(cell, terrainAcc), cell))(terrainAcc)
+  , terrain),
   R.filter(isWall),
   R.unnest
-);
+)(terrain);
 
 export default (prevState, action) => {
   prevState = prevState || initialState;
@@ -60,9 +63,6 @@ export default (prevState, action) => {
         R.assoc('playerPos', getPlayerPos(action.payload)),
         R.assoc('terrain', action.payload)
       )(prevState);
-
-      console.log(setLights(newState.terrain));
-      debugger;
 
       return newState;
 

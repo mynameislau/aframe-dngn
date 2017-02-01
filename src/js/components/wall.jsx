@@ -6,8 +6,8 @@ import { Maybe } from 'ramda-fantasy';
 const { Just, Nothing } = Maybe;
 
 const Light = vec =>
-  <Entity position={vec}>
-      <Entity light="color: #ff6300; decay: 2.38; distance: 13; intensity: 4.78; type: point;"/>
+  <Entity position={R.compose(R.join(' '), R.map(vec => vec * 1))(vec)}>
+      <Entity light="color: #ff6300; decay: 3; distance: 20; intensity: 1; type: point;"/>
       <Entity geometry="primitive: box; height: 0.1; width: 0.1; depth: 0.1" />
   </Entity>;
 
@@ -15,10 +15,10 @@ const getLights = ({x, y, light}, board) => {
 
   const getVec = orientation => {
     switch (orientation) {
-      case 'S': return '0 0 -1'
-      case 'N': return '0 0 1'
-      case 'E': return '1 0 0'
-      case 'W': return '-1 0 0'
+      case 'S': return [0, 0, -1]
+      case 'N': return [0, 0, 1]
+      case 'E': return [1, 0, 0]
+      case 'W': return [-1, 0, 0]
     }
   }
 
