@@ -4,6 +4,7 @@ import Pillar from './pillar';
 import Floor from './floor';
 import Door from './door';
 import Foe from './foe';
+import Worm from './worm';
 import { Entity } from 'aframe-react';
 import { connect } from 'react-redux';
 
@@ -15,6 +16,8 @@ const getBlock = (terrain) => {
       return Pillar;
     case 'D':
       return Door;
+    case 'W':
+      return Worm;
     case 'F':
       return Foe;
     default:

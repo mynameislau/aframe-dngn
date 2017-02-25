@@ -56,6 +56,7 @@ class VRScene extends React.Component {
             <a-asset-item id="pillar-obj" src="/data/pillar.obj"></a-asset-item>
             <a-asset-item id="door-obj" src="/data/door.obj"></a-asset-item>
             <a-asset-item id="foe-obj" src="/data/foe.obj"></a-asset-item>
+            <a-asset-item id="worm-obj" src="/data/worm.obj"></a-asset-item>
           </a-assets>
           <PlayerCam
             geometry="primitive: ring"
