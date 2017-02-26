@@ -1,6 +1,6 @@
 import React from 'react';
 import { Entity } from 'aframe-react';
-import { neighbours, orientation } from '../graph/grid';
+import { neighbours, orientation } from '../graph/cartesian-grid';
 import R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
 const { Just, Nothing } = Maybe;

@@ -5,7 +5,7 @@ import {
   CREATE_TERRAIN
 } from './main.actions';
 import R from 'ramda';
-import { orientation, neighbour, neighbours } from '../graph/grid';
+import { orientation, neighbour, neighbours } from '../graph/cartesian-grid';
 
 const initialState = {
   terrain: null,
@@ -52,9 +52,11 @@ export default (prevState, action) => {
       const y1 = prevState.playerPos.y;
       const x2 = action.payload.x;
       const y2 = action.payload.y;
+      console.log('moving player from :', x1, y1);
       const dir = orientation(x1, y1, x2, y2);
       const directNeighbour = neighbour(x1, y1, dir, prevState.terrain);
-      console.log(action.payload, prevState.playerPos, dir, directNeighbour, prevState.terrain);
+      console.log('direction: ', dir);
+      console.log('to : ', x2, y2);
       return R.assoc('playerPos', directNeighbour, prevState);
 
     case CREATE_TERRAIN:

@@ -58,9 +58,7 @@ class VRScene extends React.Component {
             <a-asset-item id="foe-obj" src="/data/foe.obj"></a-asset-item>
             <a-asset-item id="worm-obj" src="/data/worm.obj"></a-asset-item>
           </a-assets>
-          <PlayerCam
-            geometry="primitive: ring"
-            cursor="fuse: false">
+          <PlayerCam>
           </PlayerCam>
           <Entity position="0 1 0" light="type: hemisphere; color: #ffb983; groundColor: #525243; intensity: 0.54"/>
           <Board scale="3 3 3" position="0 0 0"/>

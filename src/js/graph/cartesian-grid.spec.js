@@ -1,8 +1,12 @@
 import {
   neighbours,
   neighbour,
-  orientation
-} from './grid';
+  orientation,
+  actualNeighCoords,
+  flood,
+  floodOld,
+  insert
+} from './cartesian-grid';
 import assert from 'assert';
 
 const sampleGrid = [
@@ -11,15 +15,28 @@ const sampleGrid = [
   ['i', 'j', 'k', 'l'],
   ['m', 'n', 'o', 'p'],
   ['q', 'r', 's', 't']
-]
+];
 
-describe('grid capabilities :', () => {
+const simpleSample = [
+  ['a', 'b', 'c'],
+  ['d', 'e', 'f'],
+  ['g', 'h', 'i'],
+];
+
+describe('grid capabilities', () => {
   it('can get a list of neighbours', () => {
-    assert.deepEqual(neighbours(1, 1, sampleGrid), ['b', 'e', 'g', 'j']);
+    assert.deepEqual(neighbours(1, 1, sampleGrid), ['b', 'g', 'j', 'e']);
   });
 
   it('should return null if some neighbour is out of the grid (like if your target is close to an edge', () => {
-    assert.deepEqual(neighbours(0, 0, sampleGrid), [null, null, 'b', 'e']);
+    assert.deepEqual(neighbours(0, 0, sampleGrid), [null, 'b', 'e', null]);
+  });
+
+  it('provide a function that retrieves only the coordinates of number inside the grid', () => {
+    assert.deepEqual(
+      actualNeighCoords(0, 0, sampleGrid[0].length, sampleGrid.length),
+      [[1, 0], [0, 1]]
+    );
   });
 
   it('should be able to return a specific neighbour or null if it does not exist', () => {
@@ -37,4 +54,18 @@ describe('grid capabilities :', () => {
     assert.equal(orientation(1, 1, 1, 2), 'S');
     assert.equal(orientation(0, 0, 1, 4), 'S');
   });
+
+  it('can insert a value inside a two dimensional array', () => {
+    assert.deepEqual(
+      insert([2, 2], 'toto'),
+      [ [], [], [ null, null, 'toto' ] ]
+    )
+  });
+
+  it('can flood through a grid conditionnally with the use of a predicate', () => {
+    assert.deepEqual(
+      flood(val => val !== 'b', [0, 0], simpleSample),
+      [ [ 'a', null , 'c' ], [ 'd', 'e', 'f' ], [ 'g', 'h', 'i' ] ]
+    );
+  })
 });
