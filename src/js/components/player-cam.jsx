@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
 const render = props => (
     <Entity
     camera
-    position={`${props.playerPos.x * 3} 0 ${-props.playerPos.y * 3}`}
+    position={`${props.playerPos.x} 0.5 ${-props.playerPos.y}`}
     look-controls=""
     wasd-controls="fly: true;"
     {...props}>

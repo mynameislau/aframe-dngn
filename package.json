@@ -3,7 +3,7 @@
   "version": "3.0.1",
   "description": "Boilerplate for building virtual reality experiences with A-Frame and React.",
   "dependencies": {
-    "aframe": "^0.4.0",
+    "aframe": "^0.5.0",
     "aframe-animation-component": "^3.0.4",
     "aframe-react": "^3.4.0",
     "aframe-redux-component": "^3.0.0",
@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "webpack",
+    "test": "jest",
     "serve": "webpack-dev-server --content-base src --progress --watch --history-api-fallback --inline --hot --host 0.0.0.0 --port 9090"
   },
   "repository": {

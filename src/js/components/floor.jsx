@@ -9,7 +9,7 @@ export default ({ clickHandler }) => <Entity>
       tile: '/data/tiles/slime_stone.png'
     }}
     rotation="90 0 0"
-    position="0 0.5 0"
+    position="0 2 0"
     />
     <Entity  geometry="primitive: plane; height: 1; width: 1;"
       material={{
@@ -18,7 +18,7 @@ export default ({ clickHandler }) => <Entity>
         tile: '/data/tiles/pebble_brown0.png'
       }}
       rotation="-90 0 0"
-      position="0 -0.5 0"
+      position="0 0 0"
       onClick={clickHandler ? clickHandler : () => {} }
     />
 </Entity>;

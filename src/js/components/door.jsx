@@ -15,7 +15,7 @@ export default () =>
     }}
     obj-model="obj: #door-obj;"
     scale="0.03125 0.03125 0.03125"
-    position="0 -0.5 -0.0"
+    position="0 0 -0.0"
     rotation="0 90 0"
     onClick={() => console.dir(event.currentTarget)}
     >

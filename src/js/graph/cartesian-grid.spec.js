@@ -3,6 +3,7 @@ import {
   neighbour,
   orientation,
   actualNeighCoords,
+  actualNeighbours,
   flood,
   floodOld,
   insert
@@ -30,6 +31,11 @@ describe('grid capabilities', () => {
 
   it('should return null if some neighbour is out of the grid (like if your target is close to an edge', () => {
     assert.deepEqual(neighbours(0, 0, sampleGrid), [null, 'b', 'e', null]);
+  });
+
+  it('provide a utility function that retrieves only the non null neighbours', () => {
+    assert.deepEqual(actualNeighbours(0, 0, sampleGrid), ['b', 'e']);
+    assert.deepEqual(actualNeighbours(0, 0, [['i']]), []);
   });
 
   it('provide a function that retrieves only the coordinates of number inside the grid', () => {

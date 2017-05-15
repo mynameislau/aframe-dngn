@@ -12,6 +12,11 @@ export const neighbours = R.curry((x, y, grid) => {
   return R.map(coords => gEdge(coords[1], coords[0]), neighboursCoordinates(x, y));
 });
 
+export const actualNeighbours = R.compose(
+  R.filter(edge => edge !== null),
+  neighbours
+)
+
 const neighbourIndex = direction => {
   switch (direction) {
     case 'N': return 0;

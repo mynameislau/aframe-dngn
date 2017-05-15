@@ -1,59 +1,95 @@
 import React from 'react';
 import { Entity } from 'aframe-react';
-import { neighbours, orientation } from '../graph/cartesian-grid';
+import { actualNeighbours, orientation } from '../graph/cartesian-grid';
+import { orientationToVector, orientationToRotation, canHaveWalls } from '../utils/terrain-utils';
 import R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
 const { Just, Nothing } = Maybe;
 
-const Light = vec =>
-  <Entity position={R.compose(R.join(' '), R.map(vec => vec * 1))(vec)}>
-      <Entity light="color: #ff6300; decay: 3; distance: 20; intensity: 1; type: point;"/>
-      <Entity geometry="primitive: box; height: 0.1; width: 0.1; depth: 0.1" />
+const Light = orientation =>
+  <Entity rotation={
+    R.compose(
+      R.join(' '),
+      orientationToRotation
+    )(orientation)
+  }>
+      <Entity position="0 0.6 0.6" light="color: #ff6300; decay: 3; distance: 5; intensity: 1; type: point;"/>
+      <Entity
+        material={{
+          shader: 'line-dashed',
+          tile: '/data/torch.png'
+        }}
+        obj-model="obj: #torch-obj;"
+        position="0 0.6 0.5"
+        />
   </Entity>;
 
-const getLights = ({x, y, light}, board) => {
-
-  const getVec = orientation => {
-    switch (orientation) {
-      case 'S': return [0, 0, -1]
-      case 'N': return [0, 0, 1]
-      case 'E': return [1, 0, 0]
-      case 'W': return [-1, 0, 0]
-    }
-  }
-
-  const trace = val => {
-    console.log(val);
-    return val;
-  }
-
-  const adjFloorVec = R.compose(
-    R.map(getVec),
-    R.map(floorCell => orientation(x, y, floorCell.x, floorCell.y)),
-    R.filter(cell => cell && cell.terrain === ' '),
-    () => neighbours(x, y, board)
-  );
-
-  const setLights = R.compose(
-    R.map(adjFloorVec),
-    () => light ? Just() : Nothing([])
-  );
-  const toReturn = setLights().getOrElse([]);
-
-  return toReturn;
-}
-
-export default ({ cell, board }) => <Entity>
+const Wall = orientation =>
   <Entity
+    position={
+      R.compose(
+        R.join(' '),
+        ([x, y, z]) => [x, 1, z],
+        R.map(val => val * 0.5),
+        orientationToVector
+      )(orientation)
+    }
     material={{
       shader: 'line-dashed',
+      repeat: '{x:2,y:2}',
       tile: '/data/tiles/snake0.png',
       side: 'single'
     }}
-    geometry="primitive: box; height: 1; width: 1; depth: 1"
+    rotation={
+      R.compose(
+        R.join(' '),
+        orientationToRotation
+      )(orientation)
+    }
+    geometry="primitive: plane; height: 2; width: 1;"
+    >
+
+  </Entity>
+
+const adjacentFloorCellsOrientations = R.curry((board, {x, y}) => R.compose(
+  R.map(floorCell => orientation(x, y, floorCell.x, floorCell.y)),
+  R.filter(canHaveWalls),
+  () => actualNeighbours(x, y, board)
+)());
+
+const trace = val => {
+  console.log(val);
+  return val;
+}
+
+const getLights = (board, {x, y, light}) =>// {
+  light ?
+    adjacentFloorCellsOrientations(board, {x, y})
+  : [];
+
+  // const trace = val => {
+  //   console.log(val);
+  //   return val;
+  // }
+  //
+  // const setLights = R.compose(
+  //   R.map(adjacentFloorCellsOrientations(board)),
+  //   () => light ? Just() : Nothing([])
+  // );
+  //
+  // const toReturn = setLights().getOrElse([]);
+  //
+  // return toReturn;
+// }
+
+export default ({ cell, board }) => <Entity>
+  <Entity
   ></Entity>
   {
-    R.map(Light, getLights(cell, board))
+    R.map(Wall, adjacentFloorCellsOrientations(board, cell))
+  }
+  {
+    R.map(Light, getLights(board, cell))
   }
 </Entity>;
 

@@ -93,9 +93,12 @@ module.exports = {
     rules: [{
         test: /\.jsx?$/,
         // include: [path.resolve(__dirname, 'app/js')]
+        exclude: /(node_modules|bower_components)/,
+        use: {
         loader: 'babel-loader',
-        options: {
-          presets: ['es2015', 'react', 'stage-0']
+          options: {
+            presets: ['es2015', 'react', 'stage-0']
+          }
         }
       },
       {
@@ -112,14 +115,9 @@ module.exports = {
     }],
   },
   resolve: {
-    modules: [
-      'node_modules',
-      path.resolve(__dirname, 'src/js')
-    ],
     extensions: ['.js', '.json', '.jsx', '.css'],
   },
   devtool: 'sourcemap',
   context: __dirname,
-  target: 'web',
-  externals: ['aframe']
+  target: 'web'
 }

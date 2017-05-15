@@ -20,8 +20,11 @@ const getBlock = (terrain) => {
       return Worm;
     case 'F':
       return Foe;
-    default:
+    case '@':
+    case '.':
       return Floor;
+    default:
+      return Entity;
   }
 };
 

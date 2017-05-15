@@ -30,7 +30,8 @@ export default () =>
       tile: '/data/pillar3.png'
     }}
     obj-model="obj: #pillar3-obj;"
-    position="0 -0.5 -0.0"
+    position="0 0 0"
+    scale="1 2 1"
     onClick={() => console.dir(event.currentTarget)}
     >
   </Entity>

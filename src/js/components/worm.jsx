@@ -17,7 +17,7 @@ export default () => {
     }}
     obj-model="obj: #worm-obj;"
     scale="1 1 1"
-    position="0 -0.5 -0.0"
+    position="0 0 0"
     rotation="0 0 0"
     onClick={() => console.dir(event.currentTarget)}
     >

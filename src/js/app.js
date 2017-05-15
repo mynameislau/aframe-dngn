@@ -1,4 +1,5 @@
 // import 'aframe';
+import 'aframe';
 import 'aframe-animation-component';
 // import 'aframe-text-component';
 //import objModel from 'aframe-extras/src/loaders/object-model';
@@ -49,19 +50,22 @@ class VRScene extends React.Component {
   render () {
     return (
       <Provider store={store}>
-        <Scene fog="type: exponential; density: 0.1; color: #011">
+        <Scene>
+        {/*<Scene fog="type: exponential; density: 0.1; color: #011">*/}
           <a-assets>
             <a-asset-item id="pillar3-obj" src="/data/pillar3.obj"></a-asset-item>
             <a-asset-item id="pillar2-obj" src="/data/pillar2.obj"></a-asset-item>
             <a-asset-item id="pillar-obj" src="/data/pillar.obj"></a-asset-item>
             <a-asset-item id="door-obj" src="/data/door.obj"></a-asset-item>
+            <a-asset-item id="torch-obj" src="/data/torch.obj"></a-asset-item>
             <a-asset-item id="foe-obj" src="/data/foe.obj"></a-asset-item>
             <a-asset-item id="worm-obj" src="/data/worm.obj"></a-asset-item>
           </a-assets>
-          <PlayerCam>
-          </PlayerCam>
-          <Entity position="0 1 0" light="type: hemisphere; color: #ffb983; groundColor: #525243; intensity: 0.54"/>
-          <Board scale="3 3 3" position="0 0 0"/>
+          <Entity position="0 1 0" light="type: hemisphere; color: #ffb983; groundColor: #525243; intensity: 0.3"/>
+          <Board scale="1.5 1.5 1.5" position="0 0 0">
+            <PlayerCam>
+            </PlayerCam>
+          </Board>
         </Scene>
       </Provider>
     );

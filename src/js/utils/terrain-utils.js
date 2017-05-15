@@ -37,6 +37,26 @@ export const getRow = rowIndex => R.compose(
   , 0)
 );
 
+export const canHaveWalls = cell => cell.terrain !== ' ' && cell.terrain !== 'B';
+
 export const createTerrain = getAllRows;
 
 export const createTerrainFromString = R.compose(createTerrain, createTwoDimensionalTerrain);
+
+export const orientationToVector = orientation => {
+  switch (orientation) {
+    case 'S': return [0, 0, -1]
+    case 'N': return [0, 0, 1]
+    case 'E': return [1, 0, 0]
+    case 'W': return [-1, 0, 0]
+  }
+}
+
+export const orientationToRotation = orientation => {
+  switch (orientation) {
+    case 'E': return [0, 90, 0]
+    case 'N': return [0, 0, 0]
+    case 'W': return [0, 270, 0]
+    case 'S': return [0, 180, 0]
+  }
+}
