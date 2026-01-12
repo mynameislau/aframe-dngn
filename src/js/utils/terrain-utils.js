@@ -1,17 +1,15 @@
-import * as R from 'ramda';
 import { trace }  from './utils';
 
-const splitRows = R.split('\n');
-const splitCols = R.split('');
-export const stripBeforeFirstChar = R.replace(/^[\s]*([\s\S]*)/gmi, '$1');
-export const stripAfterLastChar = R.replace(/([\s\S]*?)\s+$/gmi, '$1');
+const splitRows = (str) => str.split('\n');
+const splitCols = (str) => str.split('');
+export const stripBeforeFirstChar = (str) => str.replace(/^[\s]*([\s\S]*)/gmi, '$1');
+export const stripAfterLastChar = (str) => str.replace(/([\s\S]*?)\s+$/gmi, '$1');
 
-export const createTwoDimensionalTerrain = R.compose(
-  R.map(splitCols),
-  splitRows,
-  stripAfterLastChar,
-  stripBeforeFirstChar
-);
+export const createTwoDimensionalTerrain = (str) => {
+  const stripped = stripBeforeFirstChar(stripAfterLastChar(str));
+  const rows = splitRows(stripped);
+  return rows.map(splitCols);
+};
 
 export const getCell = (x, y, symbol) => ({
   x: x,
@@ -19,29 +17,31 @@ export const getCell = (x, y, symbol) => ({
   terrain: symbol
 });
 
-export const getAllRows = R.compose(
-  R.last,
-  R.mapAccum((rowAcc, rowVal) => [
-    rowAcc + 1,
-    getRow(rowAcc)(rowVal)
-  ]
-  , 0)
-);
+export const getAllRows = (rows) => {
+  let rowAcc = 0;
+  const result = rows.map((rowVal) => {
+    const row = getRow(rowAcc)(rowVal);
+    rowAcc++;
+    return row;
+  });
+  return result;
+};
 
-export const getRow = rowIndex => R.compose(
-  R.last,
-  R.mapAccum((colIndex, cellVal) => [
-    colIndex + 1,
-    getCell(colIndex, rowIndex, cellVal)
-  ]
-  , 0)
-);
+export const getRow = rowIndex => (cols) => {
+  let colIndex = 0;
+  const result = cols.map((cellVal) => {
+    const cell = getCell(colIndex, rowIndex, cellVal);
+    colIndex++;
+    return cell;
+  });
+  return result;
+};
 
 export const canHaveWalls = cell => cell.terrain !== ' ' && cell.terrain !== 'B';
 
 export const createTerrain = getAllRows;
 
-export const createTerrainFromString = R.compose(createTerrain, createTwoDimensionalTerrain);
+export const createTerrainFromString = (str) => createTerrain(createTwoDimensionalTerrain(str));
 
 export const orientationToVector = orientation => {
   switch (orientation) {

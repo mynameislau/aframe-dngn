@@ -4,7 +4,6 @@ import {
   MOVE_PLAYER,
   CREATE_TERRAIN
 } from './main.actions';
-import * as R from 'ramda';
 import { orientation, neighbour, neighbours } from '../graph/cartesian-grid';
 
 const initialState = {
@@ -12,36 +11,42 @@ const initialState = {
   playerPos: null
 };
 
-const getPlayerPos = R.compose(
-  R.head,
-  R.filter(cell => cell.terrain === '@'),
-  R.unnest
-)
+const getPlayerPos = (terrain) => {
+  const flattened = terrain.flat();
+  return flattened.find(cell => cell.terrain === '@');
+}
 
-const hasNeighbourWithLight = (cell, terrain) =>
-  R.compose(
-    R.length,
-    R.filter(neigh => neigh && neigh.light),
-    () => neighbours(cell.x, cell.y, terrain)
-  )();
+const hasNeighbourWithLight = (cell, terrain) => {
+  const neighs = neighbours(cell.x, cell.y, terrain);
+  return neighs.filter(neigh => neigh && neigh.light).length;
+};
 
 const isWall = cell => cell.terrain === 'B';
 
-const updateTwoDimensional = ([x, y], val) => R.adjust(R.update(x, val), y);
+const updateTwoDimensional = ([x, y], val) => (grid) => {
+  return grid.map((row, rowIndex) =>
+    rowIndex === y
+      ? row.map((cell, colIndex) => colIndex === x ? val : cell)
+      : row
+  );
+};
 
 const trace = val => {
   console.log(val);
   return val;
 }
 
-const setLights = terrain => R.compose(
-  R.reduce(
-    (terrainAcc, cell) =>
-      updateTwoDimensional([cell.x, cell.y], R.assoc('light', !hasNeighbourWithLight(cell, terrainAcc), cell))(terrainAcc)
-  , terrain),
-  R.filter(isWall),
-  R.unnest
-)(terrain);
+const setLights = terrain => {
+  const flattened = terrain.flat();
+  const walls = flattened.filter(isWall);
+  return walls.reduce(
+    (terrainAcc, cell) => {
+      const cellWithLight = { ...cell, light: !hasNeighbourWithLight(cell, terrainAcc) };
+      return updateTwoDimensional([cell.x, cell.y], cellWithLight)(terrainAcc);
+    },
+    terrain
+  );
+};
 
 export default (prevState, action) => {
   prevState = prevState || initialState;
@@ -57,15 +62,15 @@ export default (prevState, action) => {
       const directNeighbour = neighbour(x1, y1, dir, prevState.terrain);
       console.log('direction: ', dir);
       console.log('to : ', x2, y2);
-      return R.assoc('playerPos', directNeighbour, prevState);
+      return { ...prevState, playerPos: directNeighbour };
 
     case CREATE_TERRAIN:
-      const newState = R.compose(
-        state => R.assoc('terrain', setLights(state.terrain))(state),
-        R.assoc('playerPos', getPlayerPos(action.payload)),
-        R.assoc('terrain', action.payload)
-      )(prevState);
-
+      const newState = {
+        ...prevState,
+        terrain: action.payload,
+        playerPos: getPlayerPos(action.payload)
+      };
+      newState.terrain = setLights(newState.terrain);
       return newState;
 
     default:
