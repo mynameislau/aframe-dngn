@@ -7,7 +7,7 @@ import {
   createTerrainFromString
 } from './terrain-utils';
 
-import assert from 'assert';
+import { describe, it, expect } from 'vitest';
 
 const big = `
 00000
@@ -31,8 +31,8 @@ const simple = `
 `;
 
 const simpleOutput = [[
-  { x: 0, y: 0, terrain: 0 },
-  { x: 1, y: 0, terrain: 1 }
+  { x: 0, y: 0, terrain: '0' },
+  { x: 1, y: 0, terrain: '1' }
 ]];
 
 describe('Creating a map', () => {
@@ -40,38 +40,32 @@ describe('Creating a map', () => {
     const otherSample = `
 
     ok`;
-    assert.equal(stripBeforeFirstChar(otherSample), 'ok');
+    expect(stripBeforeFirstChar(otherSample)).toBe('ok');
   });
 
   it('should return a two dimensional array from a string', () => {
-    assert.deepEqual(
-      createTwoDimensionalTerrain(big),
-      bigResult
-    );
+    expect(createTwoDimensionalTerrain(big)).toEqual(bigResult);
   });
 
   it('should return terrain objects', () => {
-    assert.deepEqual(getCell(1, 2, 'a'), { x: 1, y: 2, terrain: 'a'});
+    expect(getCell(1, 2, 'a')).toEqual({ x: 1, y: 2, terrain: 'a'});
   });
 
   it('should return an array of terrain objects from an array', () => {
-    assert.deepEqual(
-      getRow(10)(['a', 'b']),
+    expect(getRow(10)(['a', 'b'])).toEqual(
       [{ x: 0, y: 10, terrain: 'a' }, { x: 1, y: 10, terrain: 'b'}]
     );
   });
 
   it('should return a beautiful object map from a two dimensional map', () => {
-    assert.deepEqual(
-      createTerrain([[0, 1]]),
-      simpleOutput
-    )
+    const numericOutput = [[
+      { x: 0, y: 0, terrain: 0 },
+      { x: 1, y: 0, terrain: 1 }
+    ]];
+    expect(createTerrain([[0, 1]])).toEqual(numericOutput);
   });
 
   it('should return something proper from a string', () => {
-    assert.deepEqual(
-      createTerrainFromString(simple),
-      simpleOutput
-    )
-  })
+    expect(createTerrainFromString(simple)).toEqual(simpleOutput);
+  });
 });
