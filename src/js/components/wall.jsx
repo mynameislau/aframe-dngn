@@ -2,7 +2,7 @@ import React from 'react';
 import { Entity } from 'aframe-react';
 import { actualNeighbours, orientation } from '../graph/cartesian-grid';
 import { orientationToVector, orientationToRotation, canHaveWalls } from '../utils/terrain-utils';
-import R from 'ramda';
+import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
 const { Just, Nothing } = Maybe;
 

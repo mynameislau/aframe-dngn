@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import { trace }  from './utils';
 
 const splitRows = R.split('\n');

@@ -1,12 +1,7 @@
-// import 'aframe';
 import 'aframe';
-import 'aframe-animation-component';
-// import 'aframe-text-component';
-//import objModel from 'aframe-extras/src/loaders/object-model';
-import 'babel-polyfill';
 import {Entity, Scene} from 'aframe-react';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 import PlayerCam from './components/player-cam';
 import Cell from './components/cell';
@@ -72,4 +67,5 @@ class VRScene extends React.Component {
   }
 }
 
-ReactDOM.render(<VRScene/>, document.querySelector('.scene-container'));
+const root = ReactDOM.createRoot(document.querySelector('.scene-container'));
+root.render(<VRScene/>);
