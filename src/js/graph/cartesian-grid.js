@@ -1,5 +1,5 @@
 import { Maybe } from 'ramda-fantasy';
-import R from 'ramda';
+import * as R from 'ramda';
 const Just = Maybe.Just;
 const Nothing = Maybe.Nothing;
 
@@ -50,7 +50,7 @@ const floodOld = (predicate, [x, y], grid, acc = []) => {
   const gEdge = edge(grid);
   const currEdge = gEdge(y, x);
 
-  const canBeAdded = !R.isNil(currEdge) && predicate(currEdge) && !R.contains([x, y], acc);
+  const canBeAdded = !R.isNil(currEdge) && predicate(currEdge) && !R.includes([x, y], acc);
 
   if (canBeAdded) {
     const currNeighboursCoords = neighboursCoordinates(x, y);

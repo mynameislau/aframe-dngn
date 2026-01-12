@@ -1,6 +1,6 @@
 // All three js imports can be found in the threejs github repository
 import  '../three/shaders/CopyShader';
-import  '../three/postprocessing/Effectcomposer';
+import  '../three/postprocessing/EffectComposer';
 import '../three/shaders/SSAOShader';
 import '../three/postprocessing/RenderPass';
 import '../three/postprocessing/ShaderPass';

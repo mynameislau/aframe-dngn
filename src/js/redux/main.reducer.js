@@ -4,7 +4,7 @@ import {
   MOVE_PLAYER,
   CREATE_TERRAIN
 } from './main.actions';
-import R from 'ramda';
+import * as R from 'ramda';
 import { orientation, neighbour, neighbours } from '../graph/cartesian-grid';
 
 const initialState = {

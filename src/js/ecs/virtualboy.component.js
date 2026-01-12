@@ -1,5 +1,5 @@
 import  '../three/shaders/CopyShader';
-import  '../three/postprocessing/Effectcomposer';
+import  '../three/postprocessing/EffectComposer';
 import '../three/shaders/FilmShader';
 import '../three/postprocessing/FilmPass';
 import '../three/postprocessing/RenderPass';

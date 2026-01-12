@@ -3,7 +3,7 @@ import { Entity } from 'aframe-react';
 import { connect } from 'react-redux';
 import { movePlayer } from '../redux/main.actions';
 
-import R from 'ramda';
+import * as R from 'ramda';
 import { trace } from '../utils/utils';
 
 import Cell from './cell';
