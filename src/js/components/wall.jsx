@@ -2,17 +2,9 @@ import React from 'react';
 import { Entity } from 'aframe-react';
 import { actualNeighbours, orientation } from '../graph/cartesian-grid';
 import { orientationToVector, orientationToRotation, canHaveWalls } from '../utils/terrain-utils';
-import * as R from 'ramda';
-import { Maybe } from 'ramda-fantasy';
-const { Just, Nothing } = Maybe;
 
-const Light = orientation =>
-  <Entity rotation={
-    R.compose(
-      R.join(' '),
-      orientationToRotation
-    )(orientation)
-  }>
+const Light = orientationValue =>
+  <Entity rotation={orientationToRotation(orientationValue).join(' ')}>
       <Entity position="0 0.6 0.6" light="color: #ff6300; decay: 3; distance: 5; intensity: 1; type: point;"/>
       <Entity
         material={{
@@ -24,38 +16,33 @@ const Light = orientation =>
         />
   </Entity>;
 
-const Wall = orientation =>
-  <Entity
-    position={
-      R.compose(
-        R.join(' '),
-        ([x, y, z]) => [x, 1, z],
-        R.map(val => val * 0.5),
-        orientationToVector
-      )(orientation)
-    }
+const Wall = orientationValue => {
+  const vector = orientationToVector(orientationValue);
+  const scaled = vector.map(val => val * 0.5);
+  const [x, y, z] = scaled;
+  const position = [x, 1, z].join(' ');
+  const rotation = orientationToRotation(orientationValue).join(' ');
+
+  return <Entity
+    position={position}
     material={{
       shader: 'line-dashed',
       repeat: '{x:2,y:2}',
       tile: '/data/tiles/snake0.png',
       side: 'single'
     }}
-    rotation={
-      R.compose(
-        R.join(' '),
-        orientationToRotation
-      )(orientation)
-    }
+    rotation={rotation}
     geometry="primitive: plane; height: 2; width: 1;"
     >
 
-  </Entity>
+  </Entity>;
+}
 
-const adjacentFloorCellsOrientations = R.curry((board, {x, y}) => R.compose(
-  R.map(floorCell => orientation(x, y, floorCell.x, floorCell.y)),
-  R.filter(canHaveWalls),
-  () => actualNeighbours(x, y, board)
-)());
+const adjacentFloorCellsOrientations = (board, {x, y}) => {
+  const neighs = actualNeighbours(x, y, board);
+  const floorCells = neighs.filter(canHaveWalls);
+  return floorCells.map(floorCell => orientation(x, y, floorCell.x, floorCell.y));
+};
 
 const trace = val => {
   console.log(val);
@@ -86,10 +73,10 @@ export default ({ cell, board }) => <Entity>
   <Entity
   ></Entity>
   {
-    R.map(Wall, adjacentFloorCellsOrientations(board, cell))
+    adjacentFloorCellsOrientations(board, cell).map(Wall)
   }
   {
-    R.map(Light, getLights(board, cell))
+    getLights(board, cell).map(Light)
   }
 </Entity>;
 

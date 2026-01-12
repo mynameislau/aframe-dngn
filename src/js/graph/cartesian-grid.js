@@ -1,21 +1,13 @@
-import { Maybe } from 'ramda-fantasy';
-import * as R from 'ramda';
-const Just = Maybe.Just;
-const Nothing = Maybe.Nothing;
+const edge = (grid, y, x) =>
+  (grid[y] && grid[y][x] ? grid[y][x] : null);
 
-const edge = R.curry((grid, y, x) =>
-  (grid[y] && grid[y][x] ? grid[y][x] : null)
-);
+export const neighbours = (x, y, grid) => {
+  return neighboursCoordinates(x, y).map(coords => edge(grid, coords[1], coords[0]));
+};
 
-export const neighbours = R.curry((x, y, grid) => {
-  const gEdge = edge(grid);
-  return R.map(coords => gEdge(coords[1], coords[0]), neighboursCoordinates(x, y));
-});
-
-export const actualNeighbours = R.compose(
-  R.filter(edge => edge !== null),
-  neighbours
-)
+export const actualNeighbours = (x, y, grid) => {
+  return neighbours(x, y, grid).filter(edge => edge !== null);
+}
 
 const neighbourIndex = direction => {
   switch (direction) {
@@ -38,26 +30,23 @@ export const actualNeighCoords = (x, y, gridW, gridH) => {
   return toReturn;
 }
 
-export const neighbour = R.curry((x, y, direction, grid) =>
-  neighbours(x, y, grid)[neighbourIndex(direction)]);
-
-const adjustGrid = (fn, x, y) =>
-  R.adjust(R.adjust(fn, x), y);
-
+export const neighbour = (x, y, direction, grid) =>
+  neighbours(x, y, grid)[neighbourIndex(direction)];
 
 //works but not optimized
 const floodOld = (predicate, [x, y], grid, acc = []) => {
-  const gEdge = edge(grid);
-  const currEdge = gEdge(y, x);
+  const currEdge = edge(grid, y, x);
 
-  const canBeAdded = !R.isNil(currEdge) && predicate(currEdge) && !R.includes([x, y], acc);
+  const includesCoord = (coords, [cx, cy]) =>
+    coords.some(([ax, ay]) => ax === cx && ay === cy);
+
+  const canBeAdded = currEdge != null && predicate(currEdge) && !includesCoord(acc, [x, y]);
 
   if (canBeAdded) {
     const currNeighboursCoords = neighboursCoordinates(x, y);
-    return R.reduce(
-      (mAcc, mCoords) =>  floodOld(predicate, mCoords, grid, mAcc),
-      R.append([x, y], acc),
-      currNeighboursCoords
+    return currNeighboursCoords.reduce(
+      (mAcc, mCoords) => floodOld(predicate, mCoords, grid, mAcc),
+      [...acc, [x, y]]
     );
   }
   else {
@@ -66,13 +55,13 @@ const floodOld = (predicate, [x, y], grid, acc = []) => {
 }
 
 export const insert = ([x, y], val, grid = []) =>
-  R.times(i => {
+  Array.from({ length: y + 1 }, (_, i) => {
     if (i !== y) {
       if (!grid[i]) { return []; }
       else { return grid[i]; }
     }
     else {
-      return R.times(n => {
+      return Array.from({ length: x + 1 }, (_, n) => {
         if (n !== x) {
           if (!grid[y] || !grid[y][n]) { return null; }
           else { return grid[y][n]; }
@@ -80,9 +69,9 @@ export const insert = ([x, y], val, grid = []) =>
         else {
           return val;
         }
-      }, x + 1);
+      });
     }
-  }, y + 1);
+  });
 
 // somewhat optimized functional version but still max call stack problem
 export const floodRecur = (predicate, [oX, oY], grid) => {
@@ -91,10 +80,9 @@ export const floodRecur = (predicate, [oX, oY], grid) => {
   const recur = ([x, y], acc = []) =>
     isInvalid([x, y], acc) ?
       acc
-      : R.reduce(
-          (currentAcc, currentCoords) => recur(currentCoords, currentAcc)
-          , insert([x, y], grid[y][x], acc)
-          , neighboursCoordinates(x, y)
+      : neighboursCoordinates(x, y).reduce(
+          (currentAcc, currentCoords) => recur(currentCoords, currentAcc),
+          insert([x, y], grid[y][x], acc)
         );
 
   return recur([oX, oY]);
@@ -107,7 +95,7 @@ export const flood = (predicate, [oX, oY], grid) => {
 
   const open = [];
 
-  const acc = R.times(() => R.times(() => null, gridW), gridH);
+  const acc = Array.from({ length: gridH }, () => Array.from({ length: gridW }, () => null));
   const visited = [].concat(acc);
 
   open.push([oX, oY]);
