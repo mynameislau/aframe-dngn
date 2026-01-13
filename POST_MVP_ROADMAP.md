@@ -1,4 +1,6 @@
-# Grid-Based Turn-Based 3D RPG - Design Plan
+# Post-MVP Roadmap: Full RPG Vision
+
+> **Note:** This document outlines the comprehensive, long-term vision for the game (12-16 week development timeline). For the current MVP being developed, see **[GDD_LEAN_MVP.md](./GDD_LEAN_MVP.md)**.
 
 ## Executive Summary
 
