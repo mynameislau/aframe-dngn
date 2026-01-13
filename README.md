@@ -7,6 +7,7 @@ A turn-based tactical dungeon crawler built with A-Frame, React, and Redux. Navi
 ## Design Documents
 
 - **[GDD_LEAN_MVP.md](./GDD_LEAN_MVP.md)** - Complete Game Design Document for the lean MVP
+- **[SPRINT_PLAN.md](./SPRINT_PLAN.md)** - 2-week sprint breakdown with daily tasks
 - **[POST_MVP_ROADMAP.md](./POST_MVP_ROADMAP.md)** - Future features and comprehensive roadmap
 
 ## Development
